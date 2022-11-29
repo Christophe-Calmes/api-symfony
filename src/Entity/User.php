@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use ApiPlateforme\Metadata\ApiRessouces;
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[APIRessource()]
+#[ApiResource]
 class User
 {
     #[ORM\Id]
