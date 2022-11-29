@@ -1,0 +1,5 @@
+App\Entity\Groupes:
+  Groupes_{0..3}:
+    name: 'Ork'
+    createdAt: <(new DateTimeImmutable())>
+    updatedAt: <(new DateTimeImmutable())>

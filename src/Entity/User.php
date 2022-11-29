@@ -35,6 +35,9 @@ class User
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?Groupes $link_group = null;
+// Traitement du Password
+    private ? plainPassword = null;
+
 
     public function getId(): ?int
     {
