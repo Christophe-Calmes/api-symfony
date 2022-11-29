@@ -34,7 +34,7 @@ class User
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    private ?groups $link_group = null;
+    private ?Groupes $link_group = null;
 
     public function getId(): ?int
     {
@@ -113,12 +113,12 @@ class User
         return $this;
     }
 
-    public function getLinkGroup(): ?groups
+    public function getLinkGroup(): ?Groupes
     {
         return $this->link_group;
     }
 
-    public function setLinkGroup(?groups $link_group): self
+    public function setLinkGroup(?Groupes $link_group): self
     {
         $this->link_group = $link_group;
 

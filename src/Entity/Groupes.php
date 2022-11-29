@@ -4,15 +4,15 @@ namespace App\Entity;
 
 
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\GroupsRepository;
+use App\Repository\GroupesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: GroupsRepository::class)]
-#[ORM\Table(name: '`groups`')]
+#[ORM\Entity(repositoryClass: GroupesRepository::class)]
+#[ORM\Table(name: '`Groupes`')]
 #[ApiResource]
-class Groups
+class Groupes
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

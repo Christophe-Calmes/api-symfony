@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Groups;
+use App\Entity\Groupes;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Groups>
+ * @extends ServiceEntityRepository<Groupes>
  *
- * @method Groups|null find($id, $lockMode = null, $lockVersion = null)
- * @method Groups|null findOneBy(array $criteria, array $orderBy = null)
- * @method Groups[]    findAll()
- * @method Groups[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Groupes|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Groupes|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Groupes[]    findAll()
+ * @method Groupes[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class GroupsRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Groups::class);
+        parent::__construct($registry, Groupes::class);
     }
 
-    public function save(Groups $entity, bool $flush = false): void
+    public function save(Groupes $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class GroupsRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Groups $entity, bool $flush = false): void
+    public function remove(Groupes $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class GroupsRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Groups[] Returns an array of Groups objects
+//     * @return Groupes[] Returns an array of Groupes objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class GroupsRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Groups
+//    public function findOneBySomeField($value): ?Groupes
 //    {
 //        return $this->createQueryBuilder('g')
 //            ->andWhere('g.exampleField = :val')
