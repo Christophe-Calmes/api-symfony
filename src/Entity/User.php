@@ -20,7 +20,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
       uriTemplate: '/users',
       normalizationContext: ['groups' => 'read:User']
   ),
-
   new Post(
       uriTemplate: '/createUser',
       denormalizationContext: ['groups' => 'create:User']
