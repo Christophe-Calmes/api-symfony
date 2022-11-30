@@ -7,3 +7,4 @@ App\Entity\User:
     lastname: <lastName()>
     createdAt: <(new DateTimeImmutable())>
     updatedAt: <(new DateTimeImmutable())>
+    group: '@group_*'

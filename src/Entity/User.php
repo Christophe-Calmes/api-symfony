@@ -2,12 +2,31 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
 use App\Repository\UserRepository;
+use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource]
+#[ApiResource(
+  operations: [
+  new GetCollection(
+      uriTemplate: '/users',
+      normalizationContext: ['groups' => 'read:User']
+  ),
+
+  new Post(
+      uriTemplate: '/createUser',
+      denormalizationContext: ['groups' => 'create:User']
+    )
+]
+  )]
 class User
 {
     #[ORM\Id]
@@ -16,25 +35,36 @@ class User
     private ?int $id = null;
 
     #[ORM\Column(length: 200)]
+    #[Groups(['create:User'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 70)]
     private ?string $password = null;
 
     #[ORM\Column(length: 60)]
+    #[Groups(['read:User', 'create:User'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 60)]
+    #[Groups(['read:User', 'create:User'])]
     private ?string $lastname = null;
 
     #[ORM\Column]
+
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
+    #[Groups(['read:User', 'create:User'])]
     private ?Groupes $link_group = null;
+
+    // Element ajouter debut
+
+
+
+    // ELement ajouter fin
 
     public function getId(): ?int
     {
