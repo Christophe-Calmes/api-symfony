@@ -39,6 +39,7 @@ class User
     private ?string $email = null;
 
     #[ORM\Column(length: 70)]
+    #[Groups(['create:User'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 60)]
