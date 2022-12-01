@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Put;
 use App\Repository\UserRepository;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
@@ -58,12 +59,6 @@ class User
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[Groups(['read:User', 'create:User'])]
     private ?Groupes $link_group = null;
-
-    // Element ajouter debut
-
-
-
-    // ELement ajouter fin
 
     public function getId(): ?int
     {

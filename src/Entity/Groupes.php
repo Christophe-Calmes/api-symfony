@@ -2,16 +2,30 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Put;
+
+use Symfony\Component\Serializer\Annotation\Groups;
 
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\GroupesRepository;
+use App\Repository\GroupsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: GroupesRepository::class)]
+#[ORM\Entity(repositoryClass: GroupsRepository::class)]
 #[ORM\Table(name: '`Groupes`')]
-#[ApiResource]
+#[ApiResource(
+  operations: [
+    new GetCollection(
+      uriTemplate: '/allGroupes',
+      normalizationContext: ['groups'=>['read:Groupes']]
+      )
+  ]
+  )]
+  //#[ApiRessource]
 class Groupes
 {
     #[ORM\Id]
@@ -20,6 +34,7 @@ class Groupes
     private ?int $id = null;
 
     #[ORM\Column(length: 60)]
+    #[Groups(['read:Groupes'])]
     private ?string $name = null;
 
     #[ORM\Column]

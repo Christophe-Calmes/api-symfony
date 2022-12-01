@@ -19,6 +19,7 @@ class GroupsRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Groupes::class);
+        //dd('toto');
     }
 
     public function save(Groupes $entity, bool $flush = false): void
