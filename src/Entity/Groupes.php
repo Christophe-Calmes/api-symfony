@@ -43,12 +43,16 @@ class Groupes
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'link_group', targetEntity: User::class)]
-    private Collection $users;
+    /*#[ORM\OneToMany(mappedBy: 'link_group', targetEntity: User::class)]
+    private Collection $users;*/
+
+    #[ORM\OneToMany(mappedBy: 'groupes', targetEntity: User::class)]
+    private Collection $link_users;
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->link_users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -95,27 +99,57 @@ class Groupes
     /**
      * @return Collection<int, User>
      */
-    public function getUsers(): Collection
+    /*public function getUsers(): Collection
     {
         return $this->users;
-    }
+    }*/
 
-    public function addUser(User $user): self
+    /*public function addUser(User $user): self
     {
         if (!$this->users->contains($user)) {
             $this->users->add($user);
-            $user->setLinkGroup($this);
+            //$user->setLinkGroup($this);
         }
 
         return $this;
-    }
+    }*/
 
-    public function removeUser(User $user): self
+    /*public function removeUser(User $user): self
     {
         if ($this->users->removeElement($user)) {
             // set the owning side to null (unless already changed)
             if ($user->getLinkGroup() === $this) {
                 $user->setLinkGroup(null);
+            }
+        }
+
+        return $this;
+    }*/
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getLinkUsers(): Collection
+    {
+        return $this->link_users;
+    }
+
+    public function addLinkUser(User $linkUser): self
+    {
+        if (!$this->link_users->contains($linkUser)) {
+            $this->link_users->add($linkUser);
+            $linkUser->setGroupes($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLinkUser(User $linkUser): self
+    {
+        if ($this->link_users->removeElement($linkUser)) {
+            // set the owning side to null (unless already changed)
+            if ($linkUser->getGroupes() === $this) {
+                $linkUser->setGroupes(null);
             }
         }
 

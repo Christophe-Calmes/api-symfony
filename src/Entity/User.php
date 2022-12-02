@@ -1,95 +1,40 @@
 <?php
 
 namespace App\Entity;
-// Ajout des éléments
-use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Get;
-use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Patch;
+
 use App\Repository\UserRepository;
-use ApiPlatform\Metadata\ApiResource;
-use App\State\UserProcessorAPI;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-// Fin ajout.
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
-
-//"message" => "Class App\Entity\User contains 3 abstract methods and must
-// therefore be declared abstract or implement the remaining methods (Symfony\Component\Security\Core\User\UserInterface::getRoles,
-// Symfony\Component\Security\Core\User\UserInterface::eraseCredentials,
-// Symfony\Component\Security\Core\User\UserInterface::getUserIdentifier)"
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource(
-  operations: [
-  new GetCollection(
-      uriTemplate: '/users',
-      normalizationContext: ['groups' => 'read:User']
-  ),
-  new Post(
-      // uriTemplate: '/createUser',
-      denormalizationContext: ['groups' => 'create:User'],
-      processor: UserProcessorAPI::class
-    ),
-  new Get()
-]
-  )]
-class User implements PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 200)]
-    #[Groups(['create:User'])]
+    #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 70)]
-    #[Groups(['create:User'])]
+    #[ORM\Column]
+    private array $roles = [];
+
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
     private ?string $password = null;
 
     #[ORM\Column(length: 60)]
-    #[Groups(['read:User', 'create:User'])]
-    private ?string $firstname = null;
-
-    #[ORM\Column(length: 60)]
-    #[Groups(['read:User', 'create:User'])]
     private ?string $lastname = null;
 
-    #[ORM\Column]
-    #[Groups(['create:User'])]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[ORM\Column(length: 60)]
+    private ?string $firstname = null;
 
-    #[ORM\Column]
-    #[Groups(['create:User'])]
-    private ?\DateTimeImmutable $updatedAt = null;
-
-    #[ORM\ManyToOne(inversedBy: 'users')]
-    #[Groups(['read:User', 'create:User'])]
-    private ?Groupes $link_group = null;
-
-    /* Ajout Interface
-
-    interface UserInterface::getRoles
-    {
-
-    }
-
-    interface UserInterface::eraseCredentials
-    {
-
-    }
-
-    interface UserInterface::getUserIdentifier
-    {
-
-    }
-
-    // Fin Interface*/
+    #[ORM\ManyToOne(inversedBy: 'link_users')]
+    private ?groupes $groupes = null;
 
     public function getId(): ?int
     {
@@ -108,7 +53,39 @@ class User implements PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPassword(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -116,6 +93,27 @@ class User implements PasswordAuthenticatedUserInterface
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
 
         return $this;
     }
@@ -132,50 +130,14 @@ class User implements PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getLastname(): ?string
+    public function getGroupes(): ?groupes
     {
-        return $this->lastname;
+        return $this->groupes;
     }
 
-    public function setLastname(string $lastname): self
+    public function setGroupes(?groupes $groupes): self
     {
-        $this->lastname = $lastname;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeImmutable
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    public function getLinkGroup(): ?Groupes
-    {
-        return $this->link_group;
-    }
-
-    public function setLinkGroup(?Groupes $link_group): self
-    {
-        $this->link_group = $link_group;
+        $this->groupes = $groupes;
 
         return $this;
     }
