@@ -26,11 +26,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
       normalizationContext: ['groups' => 'read:User']
   ),
   new Post(
-      // uriTemplate: '/createUser',
+      uriTemplate: '/createUser',
       denormalizationContext: ['groups' => 'create:User'],
       processor: UserProcessorAPI::class
     ),
-  new Get()
+  new Get(
+    uriTemplate: '/SingleUser',
+    normalizationContext: ['groups'=> 'singleUser']
+    )
 ]
   )]
 // Element API
@@ -56,22 +59,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 60)]
-    #[Groups(['read:User', 'create:User'])]
+    #[Groups(['read:User', 'create:User', 'read:CompositionGroupes'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 60)]
-    #[Groups(['read:User', 'create:User'])]
+    #[Groups(['read:User', 'create:User', 'read:CompositionGroupes'])]
     private ?string $firstname = null;
 
     #[ORM\ManyToOne(inversedBy: 'User')]
     private ?Groupes $groupes = null;
 
     #[ORM\Column]
-    #[Groups(['read:User', 'create:User'])]
+    #[Groups(['create:User'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['read:User'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     public function getId(): ?int

@@ -21,7 +21,11 @@ use Doctrine\ORM\Mapping as ORM;
   operations: [
     new GetCollection(
       uriTemplate: '/allGroupes',
-      normalizationContext: ['groups'=>['read:Groupes']]
+      normalizationContext: ['groups'=>['read:Groupes']],
+    ),
+    new GetCollection(
+      uriTemplate: '/CompositionGroupes',
+      normalizationContext: ['groups'=>'read:CompositionGroupes']
       )
   ]
   )]
@@ -34,7 +38,7 @@ class Groupes
     private ?int $id = null;
 
     #[ORM\Column(length: 60)]
-    #[Groups(['read:Groupes'])]
+    #[Groups(['read:Groupes', 'read:CompositionGroupes'])]
     private ?string $name = null;
 
     #[ORM\Column]
@@ -47,6 +51,7 @@ class Groupes
     private Collection $users;*/
 
     #[ORM\OneToMany(mappedBy: 'groupes', targetEntity: User::class)]
+    #[Groups(['read:CompositionGroupes'])]
     private Collection $link_users;
 
     public function __construct()
