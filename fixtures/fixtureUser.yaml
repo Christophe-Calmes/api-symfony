@@ -1,10 +1,9 @@
 App\Entity\User:
   User_{0..5}:
-    link_group: '10'
     email: <email()>
     password: 'dusud'
     firstname: <firstName()>
     lastname: <lastName()>
     createdAt: <(new DateTimeImmutable())>
     updatedAt: <(new DateTimeImmutable())>
-    group: '@group_*'
+    link_group: '@group_*'

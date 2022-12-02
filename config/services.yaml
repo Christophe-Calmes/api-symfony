@@ -22,3 +22,7 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    #App\State\UserProcessorAPI:
+    #  arguments:
+    #    - 'app.doctrine.hash_password_listener'
+    #    - 'app.doctrine.orm.entity_manager'
