@@ -63,8 +63,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['read:User', 'create:User'])]
     private ?string $firstname = null;
 
-    #[ORM\ManyToOne(inversedBy: 'link_users')]
-    private ?groupes $groupes = null;
+    #[ORM\ManyToOne(inversedBy: 'User')]
+    private ?Groupes $groupes = null;
 
     #[ORM\Column]
     #[Groups(['read:User', 'create:User'])]
