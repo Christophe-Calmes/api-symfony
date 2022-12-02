@@ -1,13 +1,39 @@
 <?php
 
 namespace App\Entity;
-
+// Element API
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\ApiResource;
+use App\State\UserProcessorAPI;
+// Element API
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+// Groups
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+// Element API
+#[ApiResource(
+  operations: [
+  new GetCollection(
+      uriTemplate: '/users',
+      normalizationContext: ['groups' => 'read:User']
+  ),
+  new Post(
+      // uriTemplate: '/createUser',
+      denormalizationContext: ['groups' => 'create:User'],
+      processor: UserProcessorAPI::class
+    ),
+  new Get()
+]
+  )]
+// Element API
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -16,6 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['create:User'])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -25,16 +52,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Groups(['create:User'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 60)]
+    #[Groups(['read:User', 'create:User'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 60)]
+    #[Groups(['read:User', 'create:User'])]
     private ?string $firstname = null;
 
     #[ORM\ManyToOne(inversedBy: 'link_users')]
     private ?groupes $groupes = null;
+
+    #[ORM\Column]
+    #[Groups(['read:User', 'create:User'])]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['read:User'])]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     public function getId(): ?int
     {
@@ -138,6 +176,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setGroupes(?groupes $groupes): self
     {
         $this->groupes = $groupes;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
